@@ -6,7 +6,7 @@ jobs:
     build-test:
         working_directory: ~/my-app
         docker:
-            - image: circleci/node:8.9.0-browsers
+            - image: circleci/node:4.8.2
         steps:
             # Checkout the code from the branch into the working_directory
             - checkout
