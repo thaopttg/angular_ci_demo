@@ -31,7 +31,7 @@ jobs:
             # Build project
             - run:
                 name: Building
-                command: npm run build:ssr
+                command: npm run build
             # Lint the source code
             - run:
                 name: Linting
