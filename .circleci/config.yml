@@ -3,10 +3,10 @@ version: 2
 # List of jobs
 jobs:
     # The build and test job
-    build-test:
+    build:
         working_directory: ~/my-app
         docker:
-            - image: circleci/node:4.8.2
+            - image: circleci/node:8.9.0-browsers
         steps:
             # Checkout the code from the branch into the working_directory
             - checkout
