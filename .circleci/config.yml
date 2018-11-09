@@ -3,12 +3,66 @@ version: 2
 # List of jobs
 jobs:
     # The build and test job
-    build:
+    build-test:
         working_directory: ~/my-app
         docker:
             - image: circleci/node:8.9.0-browsers
         steps:
             # Checkout the code from the branch into the working_directory
             - checkout
-            # Run the `echo` command
-            - run: echo "hello world"
+            # Log the current branch
+            - run:
+                name: Show current branch
+                command: echo ${CIRCLE_BRANCH}
+            # Restore local dependencies from cache
+            - restore_cache:
+                keys:
+                - v1-dependencies-{{ checksum "package.json" }}
+                - v1-dependencies-
+            # Install project dependencies
+            - run:
+                name: Install local dependencies
+                command: npm install
+            # Cache local dependencies if they don't exist
+            - save_cache:
+                key: v1-dependencies-{{ checksum "package.json" }}
+                paths:
+                    - node_modules
+            # Build project
+            - run:
+                name: Building
+                command: npm run build:ssr
+            # Lint the source code
+            - run:
+                name: Linting
+                command: npm run lint
+            # E2E test
+            - run:
+                name: E2E Testing
+                command: npm run e2e
+            # Test the source code
+            - run:
+                name: Unit Testing
+                command: npm run test -- --watch=false
+    # The deploy job
+    deploy:
+        machine:
+            enabled: true
+        environment:
+            FINGERPRINT: 8c:c8:d3:84:56:47:d7:28:13:2a:d8:2b:4e:53:0e:c0 # Replace this with actual value
+            SSH_USER: root # Replace this with actual value
+            SSH_HOST: 192.168.100.109 # Replace this with actual value
+        steps:
+            - add_ssh_keys:
+                fingerprints:
+                    - "$FINGERPRINT" #https://circleci.com/docs/2.0/add-ssh-key
+            - run:
+                name: Deploy Over SSH
+                command: |
+                    ssh $SSH_USER@$SSH_HOST "cd /var/www/angular-universal && git status && git checkout -- . && git pull origin master && bash deploy-circleci.sh" # Replace /var/www/angular-universal path with actual value
+workflows:
+    version: 2
+    # The build, test and deploy
+    build-test_deploy:
+        jobs:
+            - build-test
