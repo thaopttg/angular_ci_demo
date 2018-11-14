@@ -46,9 +46,10 @@ jobs:
                 command: npm run test -- --watch=false
             # The deploy job
             - deploy:
-                branch: master
-                commands:
-                    - ./scripts/deploy.sh build
+                command: |
+                      if [ "${CIRCLE_BRANCH}" == "master" ]; then
+                        echo ${CIRCLE_BRANCH}
+                      fi
 
 workflows:
     version: 2
