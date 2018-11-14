@@ -46,10 +46,10 @@ jobs:
                 command: npm run test -- --watch=false
     # The deploy job
     deploy:
-       staging:
-           branch: master
-           commands:
-             - ./scripts/deploy.sh build
+        staging:
+            branch: master
+            commands:
+               - ./scripts/deploy.sh build
 workflows:
     version: 2
     # The build, test and deploy
@@ -57,4 +57,3 @@ workflows:
         jobs:
             - build-test
             - deploy
-            
