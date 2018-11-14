@@ -57,7 +57,3 @@ workflows:
         jobs:
             - build-test
             - deploy
-              staging:
-                 branch: master
-                 commands:
-                   - ./scripts/deploy.sh build
