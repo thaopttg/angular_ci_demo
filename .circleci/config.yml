@@ -47,7 +47,7 @@ jobs:
     # The deploy job
     deploy:
         name: Deploy
-            command: |
+            command:
               if [ $CIRCLE_BRANCH == $SOURCE_BRANCH ]; then
                 git config --global thao.pttg@gmail.com $GH_EMAIL
                 git config --global thaopttg $GH_NAME
