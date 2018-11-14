@@ -2,10 +2,6 @@ version: 2
 
 # List of jobs
 jobs:
-    general:
-        branches:
-            ignore:
-                - gh-pages
     # The build and test job
     build-test:
         working_directory: ~/my-app
@@ -49,7 +45,7 @@ jobs:
                 name: Unit Testing
                 command: npm run test -- --watch=false
     # The deploy job
-    deploy:
+    deployment:
         staging:
             branch: master
             commands:
