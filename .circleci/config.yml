@@ -55,5 +55,5 @@ workflows:
     # The build, test and deploy
     build-test_deploy:
         jobs:
-            - build-test
+            #- build-test
             - deploy
