@@ -46,10 +46,8 @@ jobs:
                 command: npm run test -- --watch=false
     # The deploy job
     deploy:
-        staging:
-            branch: master
-            commands:
-              - ./scripts/deploy.sh build
+       requires:
+            - hold
 workflows:
     version: 2
     # The build, test and deploy
