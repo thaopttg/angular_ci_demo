@@ -45,7 +45,7 @@ jobs:
                 name: Unit Testing
                 command: npm run test -- --watch=false
     # The deploy job
-    deploy:
+    deploy-dev:
         staging:
             branch: master
             commands:
@@ -55,5 +55,5 @@ workflows:
     # The build, test and deploy
     build-test_deploy:
         jobs:
-            #- build-test
-            - deploy
+            - build-test
+            - deploy-dev
