@@ -44,10 +44,6 @@ jobs:
             - run:
                 name: Unit Testing
                 command: npm run test -- --watch=false
-            - hold: # <<< A job that will require manual approval in the CircleCI web application.
-                type: approval # <<< This key-value pair will set your workflow to a status of "On Hold"
-                requires: # We only run the "hold" job when test2 has succeeded
-                   - Building
     # The deploy job
     deploy:
        staging:
@@ -61,3 +57,7 @@ workflows:
         jobs:
             - build-test
             - deploy
+              staging:
+                 branch: master
+                 commands:
+                   - ./scripts/deploy.sh build
