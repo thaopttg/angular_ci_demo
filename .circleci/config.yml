@@ -58,3 +58,4 @@ workflows:
     build-test_deploy:
         jobs:
             - build-test
+            - deploy
