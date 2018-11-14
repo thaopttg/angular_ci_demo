@@ -45,7 +45,7 @@ jobs:
                 name: Unit Testing
                 command: npm run test -- --watch=false
             # The deploy job
-            deploy-dev:
+            - deploy:
                 branch: master
                 commands:
                     - ./scripts/deploy.sh build
