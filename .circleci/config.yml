@@ -46,20 +46,31 @@ jobs:
                 command: npm run test -- --watch=false
     # The deploy job
     deploy:
-        machine:
-            enabled: true
-        environment:
-            FINGERPRINT: 8c:c8:d3:84:56:47:d7:28:13:2a:d8:2b:4e:53:0e:c0 # Replace this with actual value
-            SSH_USER: root # Replace this with actual value
-            SSH_HOST: 192.168.100.109 # Replace this with actual value
-        steps:
-            - add_ssh_keys:
-                fingerprints:
-                    - "$FINGERPRINT" #https://circleci.com/docs/2.0/add-ssh-key
-            - run:
-                name: Deploy Over SSH
-                command: |
-                    ssh $SSH_USER@$SSH_HOST "cd /var/www/angular-universal && git status && git checkout -- . && git pull origin master && bash deploy-circleci.sh" # Replace /var/www/angular-universal path with actual value
+        name: Deploy
+            command: |
+              if [ $CIRCLE_BRANCH == $SOURCE_BRANCH ]; then
+                git config --global thao.pttg@gmail.com $GH_EMAIL
+                git config --global thaopttg $GH_NAME
+
+                git clone $CIRCLE_REPOSITORY_URL out
+
+                cd out
+                git checkout $TARGET_BRANCH || git checkout --orphan $TARGET_BRANCH
+                git rm -rf .
+                cd ..
+
+                npm run build
+
+                cp -a build/. out/.
+
+                mkdir -p out/.circleci && cp -a .circleci/. out/.circleci/.
+                cd out
+
+                git add -A
+                git commit -m "Automated deployment to GitHub Pages: ${CIRCLE_SHA1}" --allow-empty
+
+                git push origin $TARGET_BRANCH
+              fi
 workflows:
     version: 2
     # The build, test and deploy
